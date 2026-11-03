@@ -1,0 +1,22 @@
+.types{
+    color: green;
+    text-align: center;
+    background-color: lightblue;
+    padding: 10px;
+}
+table{
+    margin: auto;
+    border-collapse: collapse;
+    width: 60%;
+}
+th,td{
+    border: 1px solid black;
+    padding: 10px;
+    text-align: center;
+}
+th {
+    background-color: lightblue;
+}
+td{
+    background-color: white;
+}
