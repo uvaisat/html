@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Registration Form</title>
+    <style>
+        body {
+            font-family: Arial;
+            background-color: rgb(49, 170, 25);
+        }
+        h2 {
+            color: blue;
+        }form {
+            width: 300px;
+            margin: auto;
+            background-color: rgb(132, 237, 247);
+            padding: 20px;
+            border: 1px solid rgb(161, 102, 102);
+            border-radius: 12px;
+        }
+        input {
+            padding: 8px;
+            margin: 5px 0 10px;
+        }
+        input[type="text"],input[type="password"] {
+            width: 95%;
+            box-sizing: border-box;
+            border-radius: 6px;
+        }button {
+            padding: 8px 15px;
+        }
+        .error {
+            color: rgb(255, 0, 0);
+            font-size: 12px;
+            display: block;
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <form onsubmit="return validateForm()">
+        <h2 align="center">Registration Form</h2>
+        <b>Name:
+        <input type="text" id="name">
+        Email:
+        <input type="text" id="email" oninput="validateEmail()">
+        <span id="emailError" class="error"></span>
+        Password:
+        <input type="password" id="password">
+        Confirm Password:
+        <input type="password" id="confirm">
+        Phone Number:
+        <input type="text" id="phone">
+        Gender:<br></b>
+        <input type="radio" name="gender" value="Male"> Male
+        <input type="radio" name="gender" value="Female"> Female
+        <input type="radio" name="gender" value="Other"> Other
+        <br><br>
+        <button type="submit">Register</button>
+        <button type="reset">Clear</button>
+    </form>
+    <script>
+        function validateEmail() {
+            let email = document.getElementById("email").value;
+            let error = document.getElementById("emailError");
+            if (email == "") {
+                error.innerHTML = "Email is required";
+            }
+            else if (!email.includes("@") || !email.includes(".")) {
+                error.innerHTML = "Please enter a valid email";
+            }
+            else {
+                error.innerHTML = "";
+            }
+        }
+        function validateForm() {
+            let name = document.getElementById("name").value;
+            let email = document.getElementById("email").value;
+            let password = document.getElementById("password").value;
+            let confirm = document.getElementById("confirm").value;
+            let phone = document.getElementById("phone").value;
+            let gender = document.querySelector(
+                'input[name="gender"]:checked'
+            );
+            if (name == "") {
+                alert("Please enter your name");
+                return false;
+            }
+            if (!email.includes("@") || !email.includes(".")) {
+                alert("Please enter a valid email");
+                return false;
+            }
+            if (password.length < 6) {
+                alert("Password must contain at least 6 characters");
+                return false;
+            }
+            if (password != confirm) {
+                alert("Passwords do not match");
+                return false;
+            }
+            if (!/^[0-9]{10}$/.test(phone)) {
+                alert("Enter a valid 10-digit phone number");
+                return false;
+            }
+            if (!gender) {
+                alert("Please select your gender");
+                return false;
+            }
+            alert("Registration Successful!");
+            return true;
+        }
+    </script>
+</body>
+</html>
