@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calendar Generator</title>
+    <style>
+        body {
+            text-align: center;
+        }#calendar {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            padding: 10px;
+        }.month {
+            border: 1px solid black;
+            padding: 5px;
+        }table {
+            width: 100%;
+            border-collapse: collapse;
+        }th, td {
+            padding: 5px;
+            border: 1px solid #413353;
+        }.sunday {
+            color: red;
+        }
+    </style>
+</head>
+<body>
+    <h1>Calendar Generator</h1>
+    <input type="number" id="year" placeholder="Enter Year">
+    <button onclick="generateCalendar()">Generate</button><br>
+    <div id="calendar"></div>
+    <script>
+        function generateCalendar() {
+            let year = parseInt(document.getElementById("year").value);
+            let calendar = document.getElementById("calendar");
+            calendar.innerHTML = "";
+            if (isNaN(year) || year < 1 || year > 9999) {
+                alert("Enter a valid year");
+                return;
+            }
+            let months = [
+                "January", "February", "March", "April",
+                "May", "June", "July", "August",
+                "September", "October", "November", "December"
+            ];
+            months.forEach((month, index) => {
+                let firstDay = new Date(year, index, 1).getDay();
+                let totalDays = new Date(year, index + 1, 0).getDate();
+                let html = `<div class="month">
+                    <h3>${month} ${year}</h3>
+                    <table>
+                    <tr>
+                    <th>Sun</th><th>Mon</th><th>Tue</th>
+                    <th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th>
+                    </tr>`;
+                let day = 1;
+                for (let row = 0; row < 6; row++) {
+                    html += "<tr>";
+                    for (let col = 0; col < 7; col++) {
+                        if ((row === 0 && col < firstDay) || day > totalDays) {
+                            html += "<td></td>";
+                        } else {
+                            html += `<td class="${col === 0 ? 'sunday' : ''}">${day}</td>`;
+                            day++;
+                        }
+                    }
+                    html += "</tr>";
+                    if (day > totalDays) break;
+                }
+                html += "</table></div>";
+                calendar.innerHTML += html;
+            });
+        }
+    </script>
+</body>
+</html>
