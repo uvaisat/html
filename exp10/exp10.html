@@ -1,0 +1,44 @@
+<html>
+<head>
+<title>Mouse Over Event</title>
+<style>
+  body{
+     text-align:center;
+     background-color:rgb(255, 169, 57);
+     margin: 35px;
+     }
+   img{
+      width:450 px;
+      height:350 px;
+      padding: 5px;
+      border:2px solid black;
+      }
+   p{
+     font-size:23px;
+     color:rgb(221, 8, 18);
+    }
+    h1{
+    font-size:23px;
+     color:blue;
+     }
+</style>
+</head>
+<body>
+<h1>Mouse Over Event</h1>
+<div onmouseover="changeContent()">
+<img id="image" src="flower1.jpg" width="300" height="250">
+<p id="text">Move mouse over this content</p>
+</div>
+<script>
+  var images=["naruto.jpg","onepiece.jpeg","24150.jpg"]
+  var texts=["Naruto","One Piece","JJK"];
+  var i=0;
+  function changeContent()
+  {
+   i=(i+1)%images.length;
+   document.getElementById("image").src= images[i];
+   document.getElementById("text").innerHTML= texts[i];
+  }
+  </script>
+</body>
+</html>
