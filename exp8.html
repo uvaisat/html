@@ -1,142 +1,114 @@
-<!DOCTYPE html>
 <html>
 <head>
-    <title>Registration Form</title>
-    <style>
-        body {
-            font-family: Arial;
-            background-color: rgb(147, 182, 184);
-        }h2 {
-            color: blue;
-        }form {
-            width: 300px;
-            margin: auto;
-            background-color: rgb(132, 237, 247);
-            padding: 20px;
-            border: 1px solid rgb(161, 102, 102);
-            border-radius: 12px;
-        }input {
-            padding: 8px;
-            margin: 5px 0 10px;
-        }input[type="text"], input[type="password"] {
-            width: 95%;
-            box-sizing: border-box;
-            border-radius: 6px;
-        }button {
-            padding: 8px 15px;
-        }.error {
-            color: rgb(255, 0, 0);
-            font-size: 12px;
-            display: block;
-            margin-bottom: 8px;
-        }
-    </style>
+<title>Registration Form</title>
+<style>
+form {
+background: white;
+width: 350px;
+margin: 50px auto;
+padding: 20px;
+border: 1px solid gray;
+border-radius: 10px;
+}input {
+width: 95%;
+padding: 7px;
+margin: 5px 0;
+}.error {
+color: red;
+font-size: 12px;
+}button {
+background: red;
+color: white;
+padding: 9px;
+border: none;
+border-radius: 6px;
+width: 96%;
+}
+</style>
 </head>
-<body>
+<body style="background-color: green; font-family: Arial;">
 <form onsubmit="return validateForm()">
-    <h2 align="center">Registration Form</h2>
-    <b>Name:</b>
-    <input type="text" id="name">
-    <b>Email:</b>
-    <input type="text" id="email" oninput="validateEmail()">
-    <span id="emailError" class="error"></span>
-    <b>Password:</b>
-    <input type="password" id="password" oninput="validatePassword()">
-    <span id="passwordError" class="error"></span>
-    <b>Confirm Password:</b>
-    <input type="password" id="confirm" oninput="validateConfirm()">
-    <span id="confirmError" class="error"></span>
-    <b>Phone Number:</b>
-    <input type="text" id="phone" oninput="validatePhone()">
-    <span id="phoneError" class="error"></span>
-    <b>Gender:</b><br>
-    <input type="radio" name="gender" value="Male"> Male
-    <input type="radio" name="gender" value="Female"> Female
-    <input type="radio" name="gender" value="Other"> Other
-    <br><br>
-    <button type="submit">Register</button>
-    <button type="reset">Clear</button>
+<h1 style="color: blue;"><center>Registration Form</center></h1>
+Name:<br>
+<input type="text" id="name" onblur="checkName()">
+<span class="error" id="nameError"></span><br>
+Email:<br>
+<input type="text" id="email" onblur="checkEmail()">
+<span class="error" id="emailError"></span><br>
+Date of Birth:<br>
+<input type="date" id="dob" onblur="checkDate()">
+<span class="error" id="dateError"></span><br>
+Password:<br>
+<input type="password" id="password" onblur="checkPassword()">
+<span class="error" id="passwordError"></span><br>
+Confirm Password:<br>
+<input type="password" id="confirm" onblur="checkConfirm()">
+<span class="error" id="confirmError"></span><br><br>
+<button type="submit"><b>Register</b></button>
 </form>
 <script>
-function validateEmail() {
-    let email = document.getElementById("email").value;
-    let error = document.getElementById("emailError");
-    if (email == "") {
-        error.innerHTML = "Email is required";
-    }
-    else if (!email.includes("@") || !email.includes(".")) {
-        error.innerHTML = "Please enter a valid email";
-    }
-    else {
-        error.innerHTML = "";
-    }
+function checkName() {
+let name = document.getElementById("name").value;
+if (name.trim() == "") {
+document.getElementById("nameError").innerHTML="Name is required";
+return false;
 }
-function validatePassword() {
-    let password = document.getElementById("password").value;
-    let error = document.getElementById("passwordError");
-    if (password == "") {
-        error.innerHTML = "Password is required";
-    }
-    else if (password.length < 6) {
-        error.innerHTML = "Password must contain at least 6 characters";
-    }
-    else {
-        error.innerHTML = "";
-    }
-    validateConfirm();
+document.getElementById("nameError").innerHTML = "";
+return true;
 }
-function validateConfirm() {
-    let password = document.getElementById("password").value;
-    let confirm = document.getElementById("confirm").value;
-    let error = document.getElementById("confirmError");
-    if (confirm == "") {
-        error.innerHTML = "Please confirm your password";
-    }
-    else if (password != confirm) {
-        error.innerHTML = "Passwords do not match";
-    }
-    else {
-        error.innerHTML = "";
-    }
+function checkEmail() {
+let email = document.getElementById("email").value;
+let pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (!pattern.test(email)) {
+document.getElementById("emailError").innerHTML="Enter valid email";
+return false;
 }
-function validatePhone() {
-    let phone = document.getElementById("phone").value;
-    let error = document.getElementById("phoneError");
-    if (phone == "") {
-        error.innerHTML = "Phone number is required";
-    }
-    else if (!/^[0-9]{10}$/.test(phone)) {
-        error.innerHTML = "Enter a valid 10-digit phone number";
-    }
-    else {
-        error.innerHTML = "";
-    }
+document.getElementById("emailError").innerHTML = "";
+return true;
+}
+function checkDate() {
+let dob = document.getElementById("dob").value;
+if (dob == "") {
+document.getElementById("dateError").innerHTML="Date of birth is required";
+return false;
+}
+if (dob > new Date().toISOString().split("T")[0]) {
+document.getElementById("dateError").innerHTML="Date cannot be in the future";
+return false;
+}
+document.getElementById("dateError").innerHTML = "";
+return true;
+}
+function checkPassword() {
+let password = document.getElementById("password").value;
+if (password.length < 6) {
+document.getElementById("passwordError").innerHTML="Minimum 6 characters required";
+return false;
+}
+document.getElementById("passwordError").innerHTML = "";
+return true;
+}
+function checkConfirm() {
+let password = document.getElementById("password").value;
+let confirm = document.getElementById("confirm").value;
+if (confirm == "" || confirm != password) {
+document.getElementById("confirmError").innerHTML="Password does not match";
+return false;
+}
+document.getElementById("confirmError").innerHTML = "";
+return true;
 }
 function validateForm() {
-    let name = document.getElementById("name").value;
-    let gender = document.querySelector(
-        'input[name="gender"]:checked'
-    );
-    validateEmail();
-    validatePassword();
-    validateConfirm();
-    validatePhone();
-    if (name == "") {
-        alert("Please enter your name");
-        return false;
-    }
-    if (document.getElementById("emailError").innerHTML != "" ||
-        document.getElementById("passwordError").innerHTML != "" ||
-        document.getElementById("confirmError").innerHTML != "" ||
-        document.getElementById("phoneError").innerHTML != "") {
-        return false;
-    }
-    if (!gender) {
-        alert("Please select your gender");
-        return false;
-    }
-    alert("Registration Successful!");
-    return true;
+let a = checkName();
+let b = checkEmail();
+let c = checkDate();
+let d = checkPassword();
+let e = checkConfirm();
+if (a && b && c && d && e) {
+alert("Registration Successful!");
+return true;
+}
+return false;
 }
 </script>
 </body>
