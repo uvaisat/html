@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>Online Examination</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<style>
+* {
+    box-sizing: border-box;
+}body {
+    font-family: Arial;
+    margin: 20px;
+    background: #f4f4f4;
+}.container {
+    background: white;
+    padding: 20px;
+    max-width: 700px;
+    margin: auto;
+}h2 {
+    text-align: center;
+}input[type=text] {
+    padding: 8px;
+    margin: 8px 0;
+    width: 100%;
+}.question {
+    margin: 15px 0;
+}button {
+    padding: 10px 20px;
+    background: blue;
+    color: white;
+    border: none;
+    cursor: pointer;
+}#timer {
+    color: red;
+}#result {
+    font-weight: bold;
+    text-align: center;
+    line-height: 1.8;
+}.progress {
+    background: #ddd;
+    height: 10px;
+}#progressBar {
+    background: green;
+    width: 0%;
+    height: 10px;
+}
+</style>
+</head>
+<body>
+<div class="container">
+<h2>Online Examination System</h2>
+<h3>Student Details</h3>
+<input type="text" id="name" placeholder="Student Name" required>
+<input type="text" id="reg" placeholder="Registration Number" required>
+<h3>Time: <span id="timer">15:00</span></h3>
+<h3>Progress: <span id="answered">0</span>/10 Answered</h3>
+<div class="progress"><div id="progressBar"></div></div>
+<form id="exam">
+<div id="questions"></div>
+<button type="button" onclick="submitExam(false)">Submit Exam</button>
+</form>
+<h2 id="result"></h2>
+</div>
+<script>
+const qs=[
+["What does CPU stand for?",["Central Processing Unit","Computer Personal Unit","Control Program Unit"],0],
+["Which language creates web pages?",["Python","HTML","C++"],1],
+["Which is an operating system?",["Google","Windows","HTML"],1],
+["What does RAM stand for?",["Read Access Memory","Random Access Memory","Run Access Module"],1],
+["Which device prints documents?",["Monitor","Keyboard","Printer"],2],
+["Which is used to browse the internet?",["Web Browser","Compiler","Calculator"],0],
+["What does URL stand for?",["Uniform Resource Locator","Universal Read Link","United Resource Link"],0],
+["Which is an input device?",["Monitor","Keyboard","Printer"],1],
+["Which company developed Java?",["Microsoft","Sun Microsystems","Google"],1],
+["What is the brain of a computer?",["RAM","Hard Disk","CPU"],2]
+];
+document.getElementById("questions").innerHTML=qs.map((q,i)=>`
+<div class="question">
+<b>${i+1}. ${q[0]}</b><br>
+${q[1].map((o,j)=>`<label><input type="radio" name="q${i}" value="${j}">${o}</label><br>`).join("")}
+</div>`).join("");
+const studentName=document.getElementById("name");
+const registration=document.getElementById("reg");
+const timerDisplay=document.getElementById("timer");
+const result=document.getElementById("result");
+const exam=document.getElementById("exam");
+let time=900,submitted=false;
+function updateProgress(){
+let count=0;
+qs.forEach((q,i)=>{
+if(document.querySelector(`input[name="q${i}"]:checked`))count++;
+});
+document.getElementById("answered").innerText=count;
+document.getElementById("progressBar").style.width=(count/qs.length*100)+"%";
+}
+exam.addEventListener("change",updateProgress);
+let timer=setInterval(()=>{
+if(submitted)return;
+time--;
+timerDisplay.innerText=String(Math.floor(time/60)).padStart(2,"0")+":"+String(time%60).padStart(2,"0");
+if(time<=60)timerDisplay.style.color="red";
+if(time<=0)submitExam(true);
+},1000);
+function submitExam(autoSubmit){
+if(submitted)return;
+if(!autoSubmit&&(!studentName.value.trim()||!registration.value.trim())){
+alert("Please enter student name and registration number!");
+return;
+}
+submitted=true;
+clearInterval(timer);
+let score=0,unanswered=0;
+qs.forEach((q,i)=>{
+let answer=document.querySelector(`input[name="q${i}"]:checked`);
+if(!answer)unanswered++;
+if(answer&&Number(answer.value)===q[2])score++;
+});
+let percentage=score/qs.length*100;
+let status=score>=2?"PASSED!":"FAILED!";
+result.innerText=
+"EXAMINATION RESULT\n\n"+
+"Student: "+(studentName.value.trim()||"Not provided")+"\n"+
+"Registration: "+(registration.value.trim()||"Not provided")+"\n"+
+"Total Questions: "+qs.length+"\n"+
+"Correct Answers: "+score+"\n"+
+"Unanswered: "+unanswered+"\n"+
+"Wrong Answers: "+(qs.length-score-unanswered)+"\n"+
+"Percentage: "+percentage+"%\n"+
+"Status: "+status+(autoSubmit?"\n(Time expired)":"");
+exam.style.display="none";
+timerDisplay.innerText="Completed";
+}
+</script>
+</body>
+</html>
